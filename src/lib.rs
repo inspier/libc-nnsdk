@@ -12,8 +12,8 @@ pub enum c_void {}
 
 #[cfg(feature = "rustc-dep-of-std")]
 pub use rustc_std_workspace_core as core;
-#[cfg(feature = "rustc-dep-of-std")]
-use core::ops;
+//#[cfg(feature = "rustc-dep-of-std")]
+//use core::ops;
 
 use core::prelude::v1::*;
 
@@ -170,15 +170,15 @@ pub const CLOCK_REALTIME: clockid_t = 0;
 pub const ETIMEDOUT: c_int = 60;
 
 extern "C" {
-    #[link_name = "__pthread_key_create"]
+    #[link(name= "__pthread_key_create")]
     pub fn pthread_key_create(key: *mut pthread_key_t, func: extern fn(*mut c_void)) -> c_int;
-    
-    #[link_name = "__pthread_key_delete"]
+
+    #[link(name= "__pthread_key_delete")]
     pub fn pthread_key_delete(key: pthread_key_t) -> c_int;
 
-    #[link_name = "__pthread_mutex_lock"]
+    #[link(name= "__pthread_mutex_lock")]
     pub fn pthread_mutex_lock(lock: *mut pthread_mutex_t) -> c_int;
-    
+
     pub fn pthread_setspecific(
         key: pthread_key_t,
         value: *const c_void,
@@ -190,7 +190,7 @@ extern "C" {
     ) -> c_int;
 
     pub fn pthread_mutexattr_settype(
-        attr: *mut pthread_mutexattr_t, 
+        attr: *mut pthread_mutexattr_t,
         _type: c_int
     ) -> c_int;
 
@@ -211,13 +211,13 @@ extern "C" {
     ) -> c_int;
 
     pub fn pthread_mutex_init(
-        lock: *mut pthread_mutex_t, 
+        lock: *mut pthread_mutex_t,
         attr: *const pthread_mutexattr_t
     ) -> c_int;
 
     pub fn pthread_self() -> pthread_t;
 
-    #[link_name = "__pthread_join"]
+    #[link(name= "__pthread_join")]
     pub fn pthread_join(
         native: pthread_t,
         value: *mut *mut c_void,
@@ -464,27 +464,27 @@ pub const SO_KEEPALIVE: c_int = 0x0008;
 pub const INADDR_ANY: c_int = 0;
 
 extern "C" {
-    #[link_name = "nnsocketIoctl"]
+    #[link(name= "nnsocketIoctl")]
     pub fn ioctl(fd: c_int, request: c_uint, ...) -> c_int;
 
-    #[link_name = "nnsocketFreeAddrInfo"]
+    #[link(name= "nnsocketFreeAddrInfo")]
     pub fn freeaddrinfo(res: *mut addrinfo);
 
-    #[link_name = "nnsocketGetAddrInfo"]
+    #[link(name= "nnsocketGetAddrInfo")]
     pub fn getaddrinfo(
-        node: *const c_schar, 
-        service: *const c_char, 
-        hints: *const addrinfo, 
+        node: *const c_schar,
+        service: *const c_char,
+        hints: *const addrinfo,
         res: *mut *mut addrinfo
     ) -> c_int;
 
-    #[link_name = "nnsocketFcntl"]
+    #[link(name= "nnsocketFcntl")]
     pub fn fcntl(fd: c_int, cmd: c_int, ...) -> c_int;
 
     pub fn pread(
-        fd: c_int, 
-        buf: *mut c_void, 
-        count: size_t, 
+        fd: c_int,
+        buf: *mut c_void,
+        count: size_t,
         offset: off_t
     ) -> ssize_t;
 }
@@ -524,51 +524,51 @@ pub fn socketpair(
 
 // sockets
 extern "C" {
-    #[link_name = "nnsocketSocket"]
+    #[link(name= "nnsocketSocket")]
     pub fn socket(
         __domain: c_int,
         __type: c_int,
         __protocol: c_int,
     ) -> c_int;
-    #[link_name = "nnsocketBind"]
+    #[link(name= "nnsocketBind")]
     pub fn bind(
         __fd: c_int,
         __addr: *const sockaddr,
         __len: socklen_t,
     ) -> c_int;
-    #[link_name = "nnsocketGetSockName"]
+    #[link(name= "nnsocketGetSockName")]
     pub fn getsockname(
         __fd: c_int,
         __addr: *mut sockaddr,
         __len: *mut socklen_t,
     ) -> c_int;
-    #[link_name = "nnsocketConnect"]
+    #[link(name= "nnsocketConnect")]
     pub fn connect(
         __fd: c_int,
         __addr: *const sockaddr,
         __len: socklen_t,
     ) -> c_int;
-    #[link_name = "nnsocketGetPeerName"]
+    #[link(name= "nnsocketGetPeerName")]
     pub fn getpeername(
         __fd: c_int,
         __addr: *mut sockaddr,
         __len: *mut socklen_t,
     ) -> c_int;
-    #[link_name = "nnsocketSend"]
+    #[link(name= "nnsocketSend")]
     pub fn send(
         __fd: c_int,
         __buf: *const c_void,
         __n: size_t,
         __flags: c_int,
     ) -> ssize_t;
-    #[link_name = "nnsocketRecv"]
+    #[link(name= "nnsocketRecv")]
     pub fn recv(
         __fd: c_int,
         __buf: *mut c_void,
         __n: size_t,
         __flags: c_int,
     ) -> ssize_t;
-    #[link_name = "nnsocketSendTo"]
+    #[link(name= "nnsocketSendTo")]
     pub fn sendto(
         __fd: c_int,
         __buf: *const c_void,
@@ -577,7 +577,7 @@ extern "C" {
         __addr: *const sockaddr,
         __addr_len: socklen_t,
     ) -> ssize_t;
-    #[link_name = "nnsocketRecvFrom"]
+    #[link(name= "nnsocketRecvFrom")]
     pub fn recvfrom(
         __fd: c_int,
         __buf: *mut c_void,
@@ -586,7 +586,7 @@ extern "C" {
         __addr: *mut sockaddr,
         __addr_len: *mut socklen_t,
     ) -> ssize_t;
-    #[link_name = "nnsocketSendMsg"]
+    #[link(name= "nnsocketSendMsg")]
     pub fn sendmsg(
         __fd: c_int,
         __message: *const msghdr,
@@ -598,7 +598,7 @@ extern "C" {
         __vlen: c_uint,
         __flags: c_int,
     ) -> c_int;*/
-    #[link_name = "nnsocketRecvMsg"]
+    #[link(name= "nnsocketRecvMsg")]
     pub fn recvmsg(
         __fd: c_int,
         __message: *mut msghdr,
@@ -611,7 +611,7 @@ extern "C" {
         __flags: c_int,
         __tmo: *mut timespec,
     ) -> c_int;*/
-    #[link_name = "nnsocketGetSockOpt"]
+    #[link(name= "nnsocketGetSockOpt")]
     pub fn getsockopt(
         __fd: c_int,
         __level: c_int,
@@ -619,7 +619,7 @@ extern "C" {
         __optval: *mut c_void,
         __optlen: *mut socklen_t,
     ) -> c_int;
-    #[link_name = "nnsocketSetSockOpt"]
+    #[link(name= "nnsocketSetSockOpt")]
     pub fn setsockopt(
         __fd: c_int,
         __level: c_int,
@@ -628,29 +628,29 @@ extern "C" {
         __optlen: socklen_t,
     ) -> c_int;
 
-    #[link_name = "nnsocketListen"]
+    #[link(name= "nnsocketListen")]
     pub fn listen(__fd: c_int, __n: c_int) -> c_int;
-    #[link_name = "nnsocketAccept"]
+    #[link(name= "nnsocketAccept")]
     pub fn accept(
         __fd: c_int,
         __addr: *mut sockaddr,
         __addr_len: *mut socklen_t,
     ) -> c_int;
-    #[link_name = "nnsocketAccept"]
+    #[link(name= "nnsocketAccept")]
     pub fn accept4(
         __fd: c_int,
         __addr: *mut sockaddr,
         __addr_len: *mut socklen_t,
         __flags: c_int,
     ) -> c_int;
-    #[link_name = "nnsocketShutdown"]
+    #[link(name= "nnsocketShutdown")]
     pub fn shutdown(
         __fd: c_int,
         __how: c_int,
     ) -> c_int;
-    #[link_name = "nnsocketSockAtMark"]
+    #[link(name= "nnsocketSockAtMark")]
     pub fn sockatmark(__fd: c_int) -> c_int;
-    #[link_name = "nnsocketPoll"]
+    #[link(name= "nnsocketPoll")]
     pub fn poll(
         fds: *mut pollfd,
         nfds: nfds_t,
@@ -659,7 +659,7 @@ extern "C" {
 }
 
 extern "C" {
-    #[link_name = "__nnmusl_ErrnoLocation"]
+    #[link(name= "__nnmusl_ErrnoLocation")]
     pub fn errno_loc() -> *mut i64;
 }
 
@@ -682,7 +682,7 @@ extern "C" {
     pub fn isblank(c: c_int) -> c_int;
     pub fn tolower(c: c_int) -> c_int;
     pub fn toupper(c: c_int) -> c_int;
-    
+
     pub fn qsort(
         base: *mut c_void,
         num: size_t,
